@@ -5,12 +5,12 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  img: string;
+  @Column('text', { default: true })
+  img?: string = '';
 
   @Column()
   title: string;
 
   @Column()
-  composition: boolean;
+  composition: string;
 }
