@@ -5,6 +5,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 
+enum ResponseStatus {
+  NotCorrectId = 'Not correct id',
+}
+
 @Injectable()
 export class ProductsService {
   constructor(
@@ -32,7 +36,7 @@ export class ProductsService {
 
     console.log(updateProductDto);
 
-    if (!toUpdate) return { status: 'not correct id' };
+    if (!toUpdate) return { status: ResponseStatus.NotCorrectId };
 
     return this.productRepository.save({ ...toUpdate, ...updateProductDto });
   }
