@@ -13,4 +13,13 @@ export class Product {
 
   @Column()
   composition: string;
+
+  @Column('text', { default: true })
+  description?: string = '';
+
+  @Column()
+  weight: number;
+
+  @Column()
+  price: number;
 }

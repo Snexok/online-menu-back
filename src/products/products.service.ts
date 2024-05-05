@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 
-enum ResponseStatus {
+export enum ResponseStatus {
   NotCorrectId = 'Not correct id',
 }
 
@@ -16,9 +16,10 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  create(createProductDto: CreateProductDto) {
+  create(createProductDto: CreateProductDto, img: Express.Multer.File) {
     let product = new Product();
     product = Object.assign(product, createProductDto);
+    product.img = img.filename;
 
     return this.productRepository.save(product);
   }
@@ -33,8 +34,6 @@ export class ProductsService {
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     const toUpdate = await this.productRepository.findOneBy({ id });
-
-    console.log(updateProductDto);
 
     if (!toUpdate) return { status: ResponseStatus.NotCorrectId };
 
