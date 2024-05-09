@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  ParseArrayPipe,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
@@ -52,12 +51,23 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  async update(
+  @UseInterceptors(
+    FileInterceptor('img', {
+      storage: diskStorage({
+        destination: 'public',
+        filename: (req, file, cb) => {
+          cb(null, `${uuidv4()}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  update(
     @Param('id') id: string,
-    @Body(new ParseArrayPipe({ items: UpdateProductDto }))
+    @UploadedFile() img: Express.Multer.File,
+    @Body()
     updateProductDto: UpdateProductDto,
   ) {
-    return await this.productsService.update(+id, updateProductDto);
+    return this.productsService.update(+id, updateProductDto, img);
   }
 
   @Delete(':id')

@@ -32,12 +32,15 @@ export class ProductsService {
     return this.productRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    const toUpdate = await this.productRepository.findOneBy({ id });
+  update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+    img: Express.Multer.File,
+  ) {
+    if (img) updateProductDto.img = img.filename;
+    else delete updateProductDto.img;
 
-    if (!toUpdate) return { status: ResponseStatus.NotCorrectId };
-
-    return this.productRepository.save({ ...toUpdate, ...updateProductDto });
+    return this.productRepository.update({ id }, updateProductDto);
   }
 
   remove(id: number) {
