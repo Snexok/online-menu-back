@@ -16,11 +16,24 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
+import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @Get()
+  findAll() {
+    return this.productsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.productsService.findOne(+id);
+  }
+
+  @Auth(AuthType.Bearer)
   @Post()
   @UseInterceptors(
     FileInterceptor('img', {
@@ -40,16 +53,7 @@ export class ProductsController {
     return this.productsService.create(createProductDto, img);
   }
 
-  @Get()
-  findAll() {
-    return this.productsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
-  }
-
+  @Auth(AuthType.Bearer)
   @Patch(':id')
   @UseInterceptors(
     FileInterceptor('img', {
@@ -70,6 +74,7 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto, img);
   }
 
+  @Auth(AuthType.Bearer)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(+id);
