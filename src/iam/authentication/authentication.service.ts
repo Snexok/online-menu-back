@@ -14,7 +14,6 @@ import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { ActiveUserData } from '../interface/active-user-data.interface';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -59,11 +58,11 @@ export class AuthenticationService {
     return await this.generateTokens(user);
   }
 
-  async refreshTokens(refreshTokenDto: RefreshTokenDto) {
+  async refreshTokens(refreshToken: string) {
     try {
       const { sub } = await this.jwtService.verifyAsync<
         Pick<ActiveUserData, 'sub'>
-      >(refreshTokenDto.refreshToken, {
+      >(refreshToken, {
         secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,
         issuer: this.jwtConfiguration.issuer,

@@ -19,7 +19,7 @@ export class ProductsService {
   create(createProductDto: CreateProductDto, img: Express.Multer.File) {
     let product = new Product();
     product = Object.assign(product, createProductDto);
-    product.img = img.filename;
+    if (img) product.img = img.filename;
 
     return this.productRepository.save(product);
   }
