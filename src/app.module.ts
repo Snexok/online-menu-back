@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { UserModule } from './user/user.module';
 import { IamModule } from './iam/iam.module';
 import { ConfigModule } from '@nestjs/config';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ConfigModule } from '@nestjs/config';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
     }),
+    CategoriesModule,
     ProductsModule,
     UserModule,
     IamModule,
