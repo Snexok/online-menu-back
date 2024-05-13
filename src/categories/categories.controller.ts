@@ -18,6 +18,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
 import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
 import { extname } from 'path';
+import { Roles } from 'src/iam/authorization/decorators/roles.decorator';
+import { Role } from 'src/users/enums/role.enum';
 
 @Controller('categories')
 export class CategoriesController {
@@ -35,6 +37,7 @@ export class CategoriesController {
 
   @Post()
   @Auth(AuthType.Bearer)
+  @Roles(Role.Admin)
   @UseInterceptors(
     FileInterceptor('img', {
       storage: diskStorage({
@@ -54,6 +57,7 @@ export class CategoriesController {
 
   @Patch(':id')
   @Auth(AuthType.Bearer)
+  @Roles(Role.Admin)
   @UseInterceptors(
     FileInterceptor('img', {
       storage: diskStorage({
@@ -74,6 +78,7 @@ export class CategoriesController {
 
   @Delete(':id')
   @Auth(AuthType.Bearer)
+  @Roles(Role.Admin)
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(+id);
   }

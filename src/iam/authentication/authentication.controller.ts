@@ -12,6 +12,12 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { AuthenticationService } from './authentication.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { Request, Response } from 'express';
+import { ActiveUser } from '../decorators/active-user.decorator';
+import { ActiveUserData } from '../interface/active-user-data.interface';
+import { Roles } from '../authorization/decorators/roles.decorator';
+import { Role } from 'src/users/enums/role.enum';
+import { Auth } from './decorators/auth.decorator';
+import { AuthType } from './enums/auth-type.enum';
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -45,6 +51,8 @@ export class AuthenticationController {
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
+    if (!request.cookies.refreshToken) return "Have'nt refreshToken";
+
     const { accessToken, refreshToken } = await this.authService.refreshTokens(
       request.cookies.refreshToken,
     );
@@ -53,8 +61,14 @@ export class AuthenticationController {
       httpOnly: true,
       sameSite: true,
     });
-    console.log({ accessToken, refreshToken });
 
     return { accessToken };
+  }
+
+  @Get('check-admin')
+  @Auth(AuthType.Bearer)
+  @Roles(Role.Admin)
+  checkAdmin() {
+    return true;
   }
 }

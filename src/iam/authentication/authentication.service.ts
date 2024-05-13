@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { HashingService } from '../hashing/hashing.service';
 import { SignInDto } from './dto/sign-in.dto';
@@ -79,7 +79,7 @@ export class AuthenticationService {
       this.signToken<Partial<ActiveUserData>>(
         user.id,
         this.jwtConfiguration.acessTokenTtl,
-        { login: user.login },
+        { login: user.login, role: user.role },
       ),
       this.signToken<Partial<ActiveUserData>>(
         user.id,

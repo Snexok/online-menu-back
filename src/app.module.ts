@@ -5,10 +5,10 @@ import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { UserModule } from './user/user.module';
 import { IamModule } from './iam/iam.module';
 import { ConfigModule } from '@nestjs/config';
 import { CategoriesModule } from './categories/categories.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -29,8 +29,8 @@ import { CategoriesModule } from './categories/categories.module';
     }),
     CategoriesModule,
     ProductsModule,
-    UserModule,
     IamModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

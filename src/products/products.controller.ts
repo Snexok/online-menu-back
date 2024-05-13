@@ -18,6 +18,8 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
 import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
+import { Roles } from 'src/iam/authorization/decorators/roles.decorator';
+import { Role } from 'src/users/enums/role.enum';
 
 @Controller('products')
 export class ProductsController {
@@ -33,8 +35,9 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
-  @Auth(AuthType.Bearer)
   @Post()
+  @Auth(AuthType.Bearer)
+  @Roles(Role.Admin)
   @UseInterceptors(
     FileInterceptor('img', {
       storage: diskStorage({
@@ -53,8 +56,9 @@ export class ProductsController {
     return this.productsService.create(createProductDto, img);
   }
 
-  @Auth(AuthType.Bearer)
   @Patch(':id')
+  @Auth(AuthType.Bearer)
+  @Roles(Role.Admin)
   @UseInterceptors(
     FileInterceptor('img', {
       storage: diskStorage({
@@ -74,8 +78,9 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto, img);
   }
 
-  @Auth(AuthType.Bearer)
   @Delete(':id')
+  @Auth(AuthType.Bearer)
+  @Roles(Role.Admin)
   remove(@Param('id') id: string) {
     return this.productsService.remove(+id);
   }
