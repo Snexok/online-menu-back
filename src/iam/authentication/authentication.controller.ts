@@ -12,8 +12,6 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { AuthenticationService } from './authentication.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { Request, Response } from 'express';
-import { ActiveUser } from '../decorators/active-user.decorator';
-import { ActiveUserData } from '../interface/active-user-data.interface';
 import { Roles } from '../authorization/decorators/roles.decorator';
 import { Role } from 'src/users/enums/role.enum';
 import { Auth } from './decorators/auth.decorator';

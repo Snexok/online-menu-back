@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import { HashingService } from '../hashing/hashing.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { ActiveUserData } from '../interface/active-user-data.interface';
@@ -70,6 +70,10 @@ export class AuthenticationService {
       const user = await this.userRepository.findOneByOrFail({ id: sub });
       return this.generateTokens(user);
     } catch (err) {
+      // If JWT refresh token is expired then reset tokens
+      if (err instanceof TokenExpiredError)
+        return { accessToken: '', refreshToken: '' };
+
       throw new UnauthorizedException();
     }
   }
