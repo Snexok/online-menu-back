@@ -69,4 +69,15 @@ export class AuthenticationController {
   checkAdmin() {
     return true;
   }
+
+  @Get('logout')
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.cookie('refreshToken', '', {
+      secure: true,
+      httpOnly: true,
+      sameSite: true,
+    });
+
+    return { accessToken: '' };
+  }
 }
