@@ -24,7 +24,17 @@ export class ProductsService {
     return this.productRepository.save(product);
   }
 
-  findAll() {
+  findAll(category: string) {
+    if (category)
+      return this.productRepository.find({
+        relations: ['category'],
+        where: {
+          category: {
+            name: category,
+          },
+        },
+      });
+
     return this.productRepository.find();
   }
 
